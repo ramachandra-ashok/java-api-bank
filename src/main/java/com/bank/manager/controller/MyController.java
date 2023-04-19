@@ -1,6 +1,8 @@
 package com.bank.manager.controller;
 import com.bank.manager.entities.*;
 import com.bank.manager.service.AccountService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,7 @@ public class MyController {
 		}
 	
 	@GetMapping("/accounts/{id}")
-	public Account getAccount(@PathVariable String id){
+	public Account getAccount(@PathVariable String id) throws JsonMappingException, JsonProcessingException, NumberFormatException{
 		return this.accountService.getAccount(Long.parseLong(id));
 	}
 	

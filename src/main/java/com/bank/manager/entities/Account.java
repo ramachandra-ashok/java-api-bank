@@ -1,9 +1,12 @@
 package com.bank.manager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Account {
 
 	@Id

@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 import com.bank.manager.doa.AccountDoa;
 import com.bank.manager.entities.Account;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+
+
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -44,6 +50,8 @@ public class AccountServiceImpl implements AccountService {
 //		}
 		
 		//return a;
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		
 		return accountDoa.getOne(id);
 	}
