@@ -56,7 +56,7 @@ public class securityConfiguration  {
         		.authorizeHttpRequests((authz) -> {
 					try {
 						authz
-						        .requestMatchers("/authenticate").hasRole("ADMIN")
+						        .requestMatchers("/authenticate").hasRole("USER")
 						        .anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
