@@ -1,12 +1,21 @@
 package com.bank.manager.controller;
 import com.bank.manager.entities.*;
+
 import com.bank.manager.service.AccountService;
+import com.bank.manager.service.UserService;
+import com.bank.manager.utility.JWTUtility;
+import com.bank.manager.module.JwtRequest;
+import com.bank.manager.module.JwtResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +29,14 @@ import java.util.*;
 @RestController
 public class MyController {
 	
+	@Autowired
+	private JWTUtility jwtUtility;
+	
+	 @Autowired
+	    private AuthenticationManager authenticationManager;
+	 
+	 @Autowired
+	 private UserService userService;
 	
 	@Autowired
 	private AccountService accountService;
@@ -47,6 +64,30 @@ public class MyController {
 	public Account updateAccount(@RequestBody Account account) {
 		return this.accountService.updateAccount(account);
 	}
+	
+	
+    @PostMapping("/authenticate")
+    public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception{
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            jwtRequest.getUsername(),
+                            jwtRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
+
+        final UserDetails userDetails
+                = userService.loadUserByUsername(jwtRequest.getUsername());
+
+        final String token =
+                jwtUtility.generateToken(userDetails);
+
+        return  new JwtResponse(token);
+    }
 	
 	@DeleteMapping("/accounts/{id}")
 	public ResponseEntity<HttpStatus> updateAccount(@PathVariable String id) {
