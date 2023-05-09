@@ -69,6 +69,9 @@ public class UserAccountServiceImpl  {
 	    	updatedAccount.setName(userDoa.getById(userID).getName());
 	    }
 	    
+	    updatedAccount.setTokenExpiry(userDoa.getById(userID).getTokenExpiry());
+	 
+	    
 	    logger.info(" user updated "+updatedAccount);
 	    return userDoa.save(updatedAccount);
 	}
