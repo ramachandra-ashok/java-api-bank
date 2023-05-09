@@ -55,8 +55,7 @@ public class UserAccountServiceImpl  {
 	public AccountUser updateAccount(AccountUser updatedAccount) {
 		
 		String userID = String.valueOf(updatedAccount.getUserId());
-	    AccountUser existingAccount = userDoa.findById(userID)
-	                                        .orElseThrow(() -> new ResourceNotFoundException("AccountUser", "id", userID));
+	    userDoa.findById(userID).orElseThrow(() -> new ResourceNotFoundException("AccountUser", "id", userID));
 	    if (updatedAccount.getUsername() == null) {
 	    	updatedAccount.setUsername(userDoa.getById(userID).getUsername());
 	    }
