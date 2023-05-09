@@ -2,6 +2,7 @@ package com.bank.manager.utility;
 
 import io.jsonwebtoken.Claims;
 
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.bank.manager.doa.UserDoa;
 import com.bank.manager.entities.AccountUser;
-import com.bank.manager.service.UserAccountServiceImpl;
 
 import java.io.Serializable;
 import java.util.Date;

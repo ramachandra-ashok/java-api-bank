@@ -2,17 +2,16 @@ package com.bank.manager.entities;
 
 import java.sql.Date;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class AccountUser {

@@ -1,10 +1,8 @@
 package com.bank.manager.service;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+
 import java.util.List;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
-public class UserAccountServiceImpl  {
+public class UserAccountService {
 	
-	Logger logger=LoggerFactory.getLogger(UserAccountServiceImpl.class);
+	Logger logger=LoggerFactory.getLogger(UserAccountService.class);
 	
 	@Autowired
 	private  UserDoa userDoa;
@@ -68,6 +66,7 @@ public class UserAccountServiceImpl  {
 	    if (updatedAccount.getName() == null) {
 	    	updatedAccount.setName(userDoa.getById(userID).getName());
 	    }
+	    System.out.println("userDoa.getById(userID).getTokenExpiry():- "+userDoa.getById(userID).getTokenExpiry());
 	    
 	    updatedAccount.setTokenExpiry(userDoa.getById(userID).getTokenExpiry());
 	 

@@ -3,16 +3,15 @@ package com.bank.manager.filter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.bank.manager.entities.AccountUser;
-import com.bank.manager.service.UserAccountServiceImpl;
 import com.bank.manager.service.UserService;
 import com.bank.manager.utility.JWTUtility;
 

@@ -1,9 +1,7 @@
 package com.bank.manager.controller;
 
-import com.bank.manager.doa.UserDoa;
 import com.bank.manager.entities.*;
-
-import com.bank.manager.service.UserAccountServiceImpl;
+import com.bank.manager.service.UserAccountService;
 import com.bank.manager.service.UserService;
 import com.bank.manager.utility.JWTUtility;
 import com.bank.manager.module.JwtRequest;
@@ -41,7 +39,7 @@ public class MainController {
 	 private AuthenticationManager authenticationManager;
 	 
 	 @Autowired
-	 private UserAccountServiceImpl userService;
+	 private UserAccountService userService;
 	
 	@Autowired
 	private UserService service;

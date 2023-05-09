@@ -14,7 +14,7 @@ import com.bank.manager.module.CustomerUserDeatils;
 public class UserService implements UserDetailsService {
 
 	 @Autowired
-	 private UserAccountServiceImpl userService;
+	 private UserAccountService userService;
 	
 	@Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
