@@ -1,10 +1,10 @@
 package com.bank.manager.module;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Data
 @AllArgsConstructor
@@ -24,6 +24,15 @@ public class JwtRequest {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public JwtRequest(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+	
+	public JwtRequest() {
+		// TODO Auto-generated constructor stub
 	}
 
 

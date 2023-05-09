@@ -1,11 +1,18 @@
 package com.bank.manager.utility;
 
 import io.jsonwebtoken.Claims;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.bank.manager.doa.UserDoa;
+import com.bank.manager.entities.AccountUser;
+import com.bank.manager.service.UserAccountServiceImpl;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,10 +25,15 @@ public class JWTUtility implements Serializable {
 
     private static final long serialVersionUID = 234234523523L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 1* 60 * 60;
+    @Autowired
+	private  UserDoa userDoa;
+    
 
     @Value("${jwt.secret}")
     private String secretKey;
+    
+    
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -54,9 +66,14 @@ public class JWTUtility implements Serializable {
 
 
     //generate token for user
-    public String generateToken(UserDetails userDetails) {
+    public Map<String, Object> generateToken(UserDetails userDetails,AccountUser accountUser) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        accountUser.setTokenExpiry(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000));
+        userDoa.save(accountUser);
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", doGenerateToken(claims, userDetails.getUsername()));
+        result.put("expiry", new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000));
+        return result;
     }
 
 
@@ -64,6 +81,8 @@ public class JWTUtility implements Serializable {
     //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
     //2. Sign the JWT using the HS512 algorithm and secret key.
     private String doGenerateToken(Map<String, Object> claims, String subject) {
+
+    	
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
@@ -75,4 +94,7 @@ public class JWTUtility implements Serializable {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
+
 }
