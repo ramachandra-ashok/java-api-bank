@@ -25,7 +25,12 @@ public class JWTUtility implements Serializable {
 
     private static final long serialVersionUID = 234234523523L;
 
-    public static final long JWT_TOKEN_VALIDITY = 1* 60 * 60;
+    public static final long JWT_ACCESS_TOKEN_VALIDITY = 1* 60 * 60;
+    
+    public static final long JWT_REFRESH_TOKEN_VALIDITY = 30* 60 * 60;
+    
+    Map<String, Object> claims = new HashMap<>();
+    Map<String, Object> result = new HashMap<>();
     @Autowired
 	private  UserDoa userDoa;
     
@@ -67,33 +72,39 @@ public class JWTUtility implements Serializable {
 
     //generate token for user
     public Map<String, Object> generateToken(UserDetails userDetails,AccountUser accountUser) {
-        Map<String, Object> claims = new HashMap<>();
-        accountUser.setTokenExpiry(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000));
+        accountUser.setTokenExpiry(new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000));
+        result.put("jwtAccessToken", doGenerateAccessToken(userDetails.getUsername()));
+        result.put("refresh_token", doGenerateRefreshToken(userDetails.getUsername()));
+        accountUser.setRefresh_token((String)result.get("refresh_token"));
         userDoa.save(accountUser);
-        Map<String, Object> result = new HashMap<>();
-        result.put("token", doGenerateToken(claims, userDetails.getUsername()));
-        result.put("expiry", new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000));
+        result.put("expiry", new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000));
         return result;
     }
-
 
     //while creating the token -
     //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
     //2. Sign the JWT using the HS512 algorithm and secret key.
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
-
-    	
+    
+    public String doGenerateAccessToken(String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
+    private String doGenerateRefreshToken(String subject) {
 
+        return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY * 1000))
+                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
+    }
+    
 
     //validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
 
 
 

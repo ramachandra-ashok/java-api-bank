@@ -22,6 +22,7 @@ public class AccountUser {
     private String username;
     private String password;
     private java.util.Date tokenExpiry;
+    private String refresh_token;
     private String roles ;
 	public int getUserId() {
 		return userId;
@@ -52,6 +53,12 @@ public class AccountUser {
 	}
 	public void setTokenExpiry(java.util.Date date) {
 		this.tokenExpiry = date;
+	}
+	public String getRefresh_token() {
+		return refresh_token;
+	}
+	public void setRefresh_token(String refresh_token) {
+		this.refresh_token = refresh_token;
 	}
 	public String getRoles() {
 		return roles;

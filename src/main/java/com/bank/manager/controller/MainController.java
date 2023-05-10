@@ -9,6 +9,8 @@ import com.bank.manager.module.JwtResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +47,7 @@ public class MainController {
 	
 	@Autowired
 	private UserService service;
+	
 
 	
 	@GetMapping("/home")
@@ -111,6 +116,14 @@ public class MainController {
       final   Map<String, Object>  token = jwtUtility.generateToken(userDetails,accountUser);
          return  new JwtResponse(token);
         
+    }
+    
+    @GetMapping("/getAccessToken")
+    public JwtResponse getAccessToken(@RequestHeader(name = "Authorization") String token) throws Exception{
+    	token = token.substring(7);
+        String userName = jwtUtility.getUsernameFromToken(token);
+        String   accessToken = jwtUtility.doGenerateAccessToken(userName);
+        return  new JwtResponse(accessToken);
     }
 	
 	@DeleteMapping("/accounts/{id}")
